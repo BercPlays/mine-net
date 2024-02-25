@@ -1,4 +1,4 @@
-# MineNet
+# MineNet (SvelteKit)
 
 Quick and easy way to deploy minecraft servers.
 
