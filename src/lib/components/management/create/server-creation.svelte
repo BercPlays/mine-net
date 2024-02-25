@@ -1,6 +1,8 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { Autocomplete, popup } from '@skeletonlabs/skeleton';
 	let version = '';
+	let inputedServerName = '';
 
 	/** @type {String} */
 	export let jarsPath = '';
@@ -32,13 +34,23 @@
 	function onVersionSelection(event) {
 		version = event.detail.label;
 	}
+
+	/**
+	 * @param {String} version
+	 * @param {String} serverName
+	 */
+	async function createServer(serverName, version) {
+		const response = await fetch('/api/define', {
+			method: 'POST',
+			body: JSON.stringify({ serverName, version }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+	}
 </script>
 
-<form
-	class="wintry-surface-500 shadow-2xl rounded px-5 py-5 w-72 h-[120]"
-	action="?/login"
-	method="POST"
->
+<form class="wintry-surface-500 shadow-2xl rounded px-5 py-5 w-72 h-[120]">
 	<div class="text-center">
 		<strong class="text-xl">Create new server</strong>
 	</div>
@@ -48,16 +60,18 @@
 		title="username"
 		name="username"
 		type="text"
+		bind:value={inputedServerName}
 		placeholder="Server name"
 	/>
 	<p class="text-md text-white/70">Server File</p>
 	<input
 		class="input mb-2"
 		type="search"
-		name="demo"
+		name="file"
 		bind:value={version}
 		use:popup={popupSettings}
 		placeholder="Versions"
+		autocomplete="off"
 	/>
 	<p class="text-xs text-white/70 mb-2">{jarsPath}</p>
 	<div
@@ -92,5 +106,13 @@
 	<p class="text-md text-white/70">
 		Don't see your favourite server software? Ask the site provider.
 	</p>
-	<button class="btn btn-sm variant-ghost-primary mt-2 px-6" type="submit">Create</button>
+	<button
+		class="btn btn-sm variant-ghost-primary mt-2 px-6"
+		on:click={async () => {
+			await createServer(inputedServerName, version);
+			console.log('a');
+			goto('/');
+			console.log('l');
+		}}>Create</button
+	>
 </form>

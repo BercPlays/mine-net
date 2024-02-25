@@ -34,7 +34,7 @@
 						<button class="btn btn-sm variant-ghost-secondary px-6">Create Server</button>
 					</a>
 
-					<form action="/logout" method="POST">
+					<form action="/api/logout" method="POST">
 						<button class="btn btn-sm variant-ghost-error px-6">Logout</button>
 					</form>
 				{/if}
