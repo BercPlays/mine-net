@@ -3,7 +3,11 @@
 Quick and easy way to deploy minecraft servers on your local machine.
 `⚠ This website is not designer for cloud hosters ⚠`
 
+## Dependencies ⚠
+`Docker`
+
 ## Building the website
+
 
 Clone the repositorie then build it!
 
