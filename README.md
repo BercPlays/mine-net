@@ -1,6 +1,7 @@
 # MineNet (SvelteKit)
 
-Quick and easy way to deploy minecraft servers.
+Quick and easy way to deploy minecraft servers on your local machine.
+`⚠ This website is not designer for cloud hosters ⚠`
 
 ## Building the website
 
