@@ -61,6 +61,7 @@
 		name="username"
 		type="text"
 		bind:value={inputedServerName}
+		autocomplete="off"
 		placeholder="Server name"
 	/>
 	<p class="text-md text-white/70">Server File</p>
@@ -70,6 +71,7 @@
 		name="file"
 		bind:value={version}
 		use:popup={popupSettings}
+		autocomplete="off"
 		placeholder="Versions"
 	/>
 	<p class="text-xs text-white/70 mb-2">{jarsPath}</p>
