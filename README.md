@@ -4,7 +4,11 @@ Quick and easy way to deploy minecraft servers on your local machine.
 `⚠ This website is not designer for cloud hosters ⚠`
 
 ## Dependencies ⚠
-`Docker`
+
+Docker Desktop
+- [Docker](https://www.docker.com/)
+
+Or Download Docker using your package manager.
 
 ## Building the website
 
