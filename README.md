@@ -22,3 +22,8 @@ Use the start.cmd/.sh file to run the server, or:
 node -r dotenv/config build
 
 ```
+
+## Software Jars
+
+Download your jars from `https://serverjars.com/` or a similar website.
+Then put them in your Documents/MNS/jars folder.
