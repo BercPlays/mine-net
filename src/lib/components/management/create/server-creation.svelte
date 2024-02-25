@@ -50,7 +50,7 @@
 	}
 </script>
 
-<form class="wintry-surface-500 shadow-2xl rounded px-5 py-5 w-72 h-[120]">
+<form class="wintry-surface-500 shadow-2xl rounded px-5 py-5 w-72 h-[120]" autocomplete="off">
 	<div class="text-center">
 		<strong class="text-xl">Create new server</strong>
 	</div>
@@ -71,7 +71,6 @@
 		bind:value={version}
 		use:popup={popupSettings}
 		placeholder="Versions"
-		autocomplete="off"
 	/>
 	<p class="text-xs text-white/70 mb-2">{jarsPath}</p>
 	<div
