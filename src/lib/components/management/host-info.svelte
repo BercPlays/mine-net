@@ -3,7 +3,7 @@
 		class="w-full pl-4 py-3 bg-slate-800 rounded-lg shadow-2xl flex flex-col justify-center"
 		id="info-panel"
 	>
-		<strong class="text-2xl"> Host machine resources </strong>
+		<strong class="text-2xl"> Host machine info</strong>
 		<p class="flex flex-row justify-start text-sky-400 text-sm">
 			<span class="material-symbols-rounded pr-1 text-sky-400 text-sm"> memory</span>25% CPU Usage
 		</p>

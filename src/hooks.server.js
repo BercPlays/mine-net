@@ -1,28 +1,17 @@
 /** @type {import('@sveltejs/kit').Handle} */
 import { getAuth } from '$lib/getAuth';
-import { mineNetFolder, mineNetJarsFolder, mineNetServersFolder } from '$lib/server/importantDirs';
+import {
+	mineNetFolder,
+	mineNetJarsFolder,
+	mineNetJavaVersionsFolder,
+	mineNetServersFolder
+} from '$lib/server/importantDirs';
+import { mnprint } from '$lib/server/mnPrint';
 import { validateUser } from '$lib/server/validateUser';
 import { redirect } from '@sveltejs/kit';
-
 import fs from 'node:fs';
 
 start();
-
-/**
- * @param {String} message
- * @returns {void}
- */
-function mnprint(message) {
-	const now = new Date();
-	now.getMinutes();
-
-	const minutes = String(now.getMinutes()).padStart(2, '0');
-	const hours = String(now.getHours()).padStart(2, '0');
-
-	const currentTime = `${hours}:${minutes}`;
-
-	console.log(`[${currentTime}] [MINE-NET] ${message}`);
-}
 
 function start() {
 	/**
@@ -50,6 +39,7 @@ function start() {
 	createDir(mineNetFolder);
 	createDir(mineNetJarsFolder);
 	createDir(mineNetServersFolder);
+	createDir(mineNetJavaVersionsFolder);
 	mnprint(`Software jars should be in ${mineNetJarsFolder}`);
 }
 

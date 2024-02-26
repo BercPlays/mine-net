@@ -10,6 +10,11 @@
 	/** @type {number} */
 	let scrollLeft;
 
+	/**
+	 * @type {string | any[]}
+	 */
+	export let serverData = [];
+
 	onMount(() => {
 		slider.addEventListener('mousedown', (e) => {
 			isDown = true;
@@ -34,41 +39,19 @@
 			slider.scrollLeft = scrollLeft - walk;
 		});
 	});
-
-	let dummyData = [
-		{
-			id: 0,
-			name: 'server-1',
-			minecraft: {
-				version: '1.20'
-			},
-			software: {
-				name: 'paper',
-				version: '1.43'
-			}
-		},
-		{
-			id: 1,
-			name: 'studio-server',
-			minecraft: {
-				version: '1.12.2'
-			},
-			software: {
-				name: 'magam',
-				version: '2.69'
-			}
-		}
-	];
-	/**
-	 * @param {number} index
-	 */
 </script>
 
 <div
 	class="bg-slate-800 p-4 scroll-px-0 snap-mandatory flex gap-4 overflow-x-auto"
 	bind:this={slider}
 >
-	{#each Array.from({ length: 2 }) as _, i}
-		<ServerCard></ServerCard>
-	{/each}
+	{#if serverData.length == 0}
+		<p class="text-white">No available servers!</p>
+		<p class="text-white/70">Click the 'Create Server' button to get started!</p>
+	{:else}
+		{#each serverData as item}
+			<ServerCard name={item.serverName} software={item.softwareFile} online={item.online}
+			></ServerCard>
+		{/each}
+	{/if}
 </div>

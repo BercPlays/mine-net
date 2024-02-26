@@ -9,6 +9,5 @@ export const POST = async ({ cookies }) => {
 		secure: false,
 		maxAge: 0
 	});
-
 	redirect(303, '/');
 };

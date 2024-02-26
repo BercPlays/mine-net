@@ -1,5 +1,7 @@
 import { isUserLoggedIn } from '$lib/isUserLoggedIn';
-import { getLocalSoftwares } from '$lib/server/getLocalSoftwares';
+import { getLocalJavaVersions } from '$lib/server/pageData/getLocalJavaVersions';
+import { getLocalSoftwares } from '$lib/server/pageData/getLocalSoftwares';
+import { getServerData } from '$lib/server/pageData/getServerData';
 import { mineNetJarsFolder } from '$lib/server/importantDirs';
 
 /** @type {import('./$types').LayoutServerLoad} */
@@ -8,6 +10,8 @@ export const load = async ({ cookies }) => {
 		isLoggedIn: isUserLoggedIn(cookies),
 		// isOnServersPage: new URL(request.url).pathname == '/management',
 		jarsPath: mineNetJarsFolder,
-		softwares: getLocalSoftwares()
+		softwares: getLocalSoftwares(),
+		javaVersions: getLocalJavaVersions(),
+		serverData: getServerData()
 	};
 };

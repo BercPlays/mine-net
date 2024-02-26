@@ -7,6 +7,10 @@
 
 <div class="h-full w-full grid place-items-center">
 	<div class="pb-32">
-		<ServerCreation jarsPath={data.jarsPath} softwares={data.softwares}></ServerCreation>
+		<ServerCreation
+			jarsPath={data.jarsPath}
+			softwares={data.softwares}
+			javaVersions={data.javaVersions}
+		></ServerCreation>
 	</div>
 </div>

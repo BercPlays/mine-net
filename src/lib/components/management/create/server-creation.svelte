@@ -3,14 +3,19 @@
 	import { Autocomplete, popup } from '@skeletonlabs/skeleton';
 	let version = '';
 	let inputedServerName = '';
+	let inputedJavaVersion = '';
 
 	/** @type {String} */
 	export let jarsPath = '';
 	/** @type {String[]} */
 	export let softwares = [];
+	/** @type {String[]} */
+	export let javaVersions = [];
 
 	/** @type {import('@skeletonlabs/skeleton').AutocompleteOption<String>[]} */
 	const versionOptions = [];
+	/** @type {import('@skeletonlabs/skeleton').AutocompleteOption<String>[]} */
+	const javaVersionOptions = [];
 
 	softwares.forEach((software) => {
 		if (software.split('.').pop() != 'jar') {
@@ -21,10 +26,23 @@
 			value: software
 		});
 	});
+
+	javaVersions.forEach((javaVersion) => {
+		javaVersionOptions.push({
+			label: javaVersion,
+			value: javaVersion
+		});
+	});
 	/** @type {import('@skeletonlabs/skeleton').PopupSettings} */
-	let popupSettings = {
+	let popupSettingsFile = {
 		event: 'focus-click',
-		target: 'popupAutocomplete',
+		target: 'popupAutocompleteFile',
+		placement: 'bottom'
+	};
+	/** @type {import('@skeletonlabs/skeleton').PopupSettings} */
+	let popupSettingsJavaVersion = {
+		event: 'focus-click',
+		target: 'popupAutocompleteJavaVersion',
 		placement: 'bottom'
 	};
 	/**
@@ -34,15 +52,23 @@
 	function onVersionSelection(event) {
 		version = event.detail.label;
 	}
+	/**
+	 * @param {CustomEvent<import('@skeletonlabs/skeleton').AutocompleteOption<string>>} event
+	 * @returns {void}
+	 */
+	function onJavaVersionSelection(event) {
+		inputedJavaVersion = event.detail.label;
+	}
 
 	/**
 	 * @param {String} version
 	 * @param {String} serverName
+	 * @param {String} javaVersion
 	 */
-	async function createServer(serverName, version) {
+	async function createServer(serverName, version, javaVersion) {
 		const response = await fetch('/api/define', {
 			method: 'POST',
-			body: JSON.stringify({ serverName, version }),
+			body: JSON.stringify({ serverName, version, javaVersion }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -64,13 +90,15 @@
 		autocomplete="off"
 		placeholder="Server name"
 	/>
+	<!-- Server File -->
 	<p class="text-md text-white/70">Server File</p>
+
 	<input
 		class="input mb-2"
 		type="search"
 		name="file"
 		bind:value={version}
-		use:popup={popupSettings}
+		use:popup={popupSettingsFile}
 		autocomplete="off"
 		placeholder="Versions"
 	/>
@@ -78,42 +106,43 @@
 	<div
 		class="card w-full max-w-60 max-h-36 p-1 overflow-y-auto"
 		tabindex="-1"
-		data-popup="popupAutocomplete"
+		data-popup="popupAutocompleteFile"
 	>
 		<Autocomplete bind:input={version} options={versionOptions} on:selection={onVersionSelection} />
 	</div>
-	<!-- <p class="text-md text-white/70">Server Software</p> -->
-	<!-- <ListBox>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="vanilla">Vanilla</ListBoxItem>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="spigot"
-			>Spigot (Plugins)</ListBoxItem
-		>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="paper"
-			>Paper (Plugins)</ListBoxItem
-		>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="purpur"
-			>Purpur (Plugins)</ListBoxItem
-		>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="fabric"
-			>Fabric (Mods)</ListBoxItem
-		>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="forge"
-			>Forge (Mods)</ListBoxItem
-		>
-		<ListBoxItem bind:group={softwareSelection} name="medium" value="magma"
-			>Magma (Mods, Plugins)</ListBoxItem
-		>
-	</ListBox> -->
+	<!-- Server File -->
+
+	<!-- Server Java Version -->
+	<input
+		class="input mb-2"
+		type="search"
+		name="file"
+		bind:value={inputedJavaVersion}
+		use:popup={popupSettingsJavaVersion}
+		autocomplete="off"
+		placeholder="Versions"
+	/>
+	<div
+		class="card w-full max-w-60 max-h-36 p-1 overflow-y-auto"
+		tabindex="-1"
+		data-popup="popupAutocompleteJavaVersion"
+	>
+		<Autocomplete
+			bind:input={inputedJavaVersion}
+			options={javaVersionOptions}
+			on:selection={onJavaVersionSelection}
+		/>
+	</div>
+
+	<!-- Server Java Version -->
 	<p class="text-md text-white/70">
 		Don't see your favourite server software? Ask the site provider.
 	</p>
 	<button
 		class="btn btn-sm variant-ghost-primary mt-2 px-6"
 		on:click={async () => {
-			await createServer(inputedServerName, version);
-			console.log('a');
+			await createServer(inputedServerName, version, inputedJavaVersion);
 			goto('/');
-			console.log('l');
 		}}>Create</button
 	>
 </form>
