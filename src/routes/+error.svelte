@@ -3,6 +3,8 @@
 	import ErrorAlert from '$lib/components/error-alert.svelte';
 </script>
 
-<div class="pt-2">
-	<ErrorAlert status={$page.status} message={$page.error?.message}></ErrorAlert>
+<div class="h-full w-full grid place-items-center">
+	<div class="pb-32">
+		<ErrorAlert status={$page.status} message={$page.error?.message}></ErrorAlert>
+	</div>
 </div>

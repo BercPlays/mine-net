@@ -4,9 +4,10 @@
 
 	/** @type {import('./$types').PageData} */
 	export let data;
+	$: serverData = data.serverData;
 </script>
 
 <div class="mt-2">
-	<ServerCardContainer serverData={data.serverData}></ServerCardContainer>
+	<ServerCardContainer {serverData}></ServerCardContainer>
 	<HostInfo></HostInfo>
 </div>

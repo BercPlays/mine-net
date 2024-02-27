@@ -1,6 +1,8 @@
 <script>
 	import '../app.postcss';
 
+	import { page } from '$app/stores';
+
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -25,11 +27,11 @@
 			<p class=" text-sm text-zinc-500">Software by zsigsza</p>
 			<svelte:fragment slot="trail">
 				{#if data.isLoggedIn}
-					<!-- {#if !data.isOnServersPage} -->
-					<a href="/management">
-						<button class="btn btn-sm variant-ghost-primary px-6">Server List</button>
-					</a>
-					<!-- {/if} -->
+					{#if !($page.url.pathname == '/management')}
+						<a href="/management">
+							<button class="btn btn-sm variant-ghost-primary px-6">Server List</button>
+						</a>
+					{/if}
 					<a href="/management/create">
 						<button class="btn btn-sm variant-ghost-secondary px-6">Create Server</button>
 					</a>
@@ -41,9 +43,12 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<!-- (pageHeader) -->
+	<svelte:fragment slot="sidebarLeft"></svelte:fragment>
+	<svelte:fragment slot="sidebarRight"></svelte:fragment>
+	<svelte:fragment slot="pageHeader"></svelte:fragment>
 	<!-- Router Slot -->
 	<slot />
 	<!-- ---- / ---- -->
-	<!-- (pageFooter) -->
+	<svelte:fragment slot="pageFooter"></svelte:fragment>
+	<svelte:fragment slot="footer"></svelte:fragment>
 </AppShell>

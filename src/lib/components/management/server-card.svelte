@@ -20,10 +20,12 @@
 	id="card"
 >
 	<div class="h-full w-full bg-gradient-to-tr from-zinc-500" bind:this={cardHtml}>
-		<div class="h-full w-full flex flex-col justify-end p-4">
-			<strong class="text-2xl">{name}</strong>
-			<p class="text-xs text-white/70">Using {software}</p>
-		</div>
+		<a href="/management/panel/{name}">
+			<div class="h-full w-full flex flex-col justify-end p-4">
+				<strong class="text-2xl">{name}</strong>
+				<p class="text-xs text-white/70">Using {software}</p>
+			</div>
+		</a>
 	</div>
 </div>
 

@@ -8,7 +8,6 @@ import { mineNetJarsFolder } from '$lib/server/importantDirs';
 export const load = async ({ cookies }) => {
 	return await {
 		isLoggedIn: isUserLoggedIn(cookies),
-		// isOnServersPage: new URL(request.url).pathname == '/management',
 		jarsPath: mineNetJarsFolder,
 		softwares: getLocalSoftwares(),
 		javaVersions: getLocalJavaVersions(),
