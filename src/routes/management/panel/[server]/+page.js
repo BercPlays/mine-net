@@ -1,5 +1,5 @@
 import { serverExists } from '$lib/apiInterface/serverExists';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, fetch }) {
@@ -11,4 +11,5 @@ export async function load({ params, fetch }) {
 	if (!_serverExists) {
 		error(404, "Server doesn't exists.");
 	}
+	redirect(303, `/management/panel/${serverName}/overview`);
 }
