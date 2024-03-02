@@ -43,5 +43,33 @@ export const insertIntoTable = (tableName, dataSet) => {
  * @param {String} tableName
  */
 export const deleteEntriesInTable = (tableName) => {
-	return DataBaseController.run(`DELETE FROM ${tableName}`)
+	return DataBaseController.run(`DELETE FROM ${tableName}`);
+};
+/**
+ * @param {String} tableName
+ * @param {number} id
+ */
+export const getDataBasedOnId = (tableName, id) => {
+	return new Promise((resolve, reject) => {
+		DataBaseController.get(`SELECT * FROM ${tableName} WHERE id = ?`, [id]).then((row) => {
+			if (!row) reject('No row exists');
+			resolve(row);
+		});
+	});
+};
+
+/**
+ * @param {String} tableName
+ * @param {String} value
+ * @param {String} fieldName
+ */
+export const getDataBasedOnValue = (tableName, fieldName, value) => {
+	return new Promise((resolve, reject) => {
+		DataBaseController.get(`SELECT * FROM ${tableName} WHERE ${fieldName} = ?`, [value]).then(
+			(row) => {
+				if (!row) reject('No row exists');
+				resolve(row);
+			}
+		);
+	});
 };

@@ -36,11 +36,12 @@ class DataBaseController {
 	/**
 	 * Performs a GET on the database
 	 * @param {string} command
+	 * @param {any[] | undefined} [params]
 	 */
-	static get(command) {
+	static get(command, params) {
 		return new Promise((resolve, reject) => {
 			DataBaseController._connect();
-			DataBaseController._baseDb?.get(command, (err, row) => {
+			DataBaseController._baseDb?.get(command, params, (err, row) => {
 				if (err) reject(err.message);
 				resolve(row);
 			});

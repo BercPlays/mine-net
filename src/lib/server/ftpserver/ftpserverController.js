@@ -1,11 +1,14 @@
 import { FTP_HOST, FTP_PORT } from '$env/static/private';
 
 import * as ftp from 'ftp-srv';
-const { FtpSrv, GeneralError } = ftp;
+const { FtpSrv } = ftp;
+import * as errors from 'ftp-srv/src/errors';
 import resolverFunction from './resolver';
 import { mnprint } from '../mnPrint';
 import { assert } from 'console';
 import { mineNetServersFolder } from '../importantDirs';
+import { getDataBasedOnValue } from '../database/databaseActions';
+import path from 'path';
 
 class FTPServerController {
 	static _start() {
@@ -33,11 +36,15 @@ class FTPServerController {
 		});
 		this._started = true;
 
-		this._baseServer.on('login', ({ connection, username, password }, resolve, reject) => {
-			if (username === 'anonymous' && password === 'anonymous') {
-				return resolve({ root: mineNetServersFolder });
+		this._baseServer.on('login', async ({ connection, username, password }, resolve, reject) => {
+			try {
+				const credentialData = await getDataBasedOnValue('ftpCredentials', 'username', username);
+				if (!credentialData) throw new Error();
+				if (credentialData.password != password) throw new Error();
+				return resolve({ root: path.join(mineNetServersFolder, credentialData.username) });
+			} catch (error) {
+				return reject(new errors.GeneralError('Invalid username or password', 401));
 			}
-			return reject(new GeneralError('Invalid username or password', 401));
 		});
 
 		this._baseServer.listen().then(() => {

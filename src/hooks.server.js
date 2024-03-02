@@ -44,47 +44,46 @@ async function start() {
 	createDir(mineNetJavaVersionsFolder);
 	mnprint(`Software jars should be in ${mineNetJarsFolder}`);
 
-	createTable('servers', {
-		// @ts-ignore
-		id: {
-			type: 'INTEGER',
-			flags: 'PRIMARY KEY AUTOINCREMENT'
-		},
-		name: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		software: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		javaVersion: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		}
-		// TODO: Use getServerCount to launch an ftp server
-	});
+	// await createTable('servers', {
+	// 	// @ts-ignore
+	// 	id: {
+	// 		type: 'INTEGER',
+	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
+	// 	},
+	// 	name: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	software: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	javaVersion: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	}
+	// });
 
-	createTable('ftpCredentials', {
-		// @ts-ignore
-		id: {
-			type: 'INTEGER',
-			flags: 'PRIMARY KEY AUTOINCREMENT'
-		},
-		username: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		password: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		serverId: {
-			type: 'INTEGER',
-			flags: 'NOT NULL'
-		}
-	});
-	if ((await getServerCount()) > 0) FTPServerController._start();
+	// await createTable('ftpCredentials', {
+	// 	// @ts-ignore
+	// 	id: {
+	// 		type: 'INTEGER',
+	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
+	// 	},
+	// 	username: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	password: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	serverId: {
+	// 		type: 'INTEGER',
+	// 		flags: 'NOT NULL'
+	// 	}
+	// });
+	// if ((await getServerCount()) > 0) FTPServerController._start();
 }
 
 function shutdown() {
