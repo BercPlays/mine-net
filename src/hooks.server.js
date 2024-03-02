@@ -1,5 +1,7 @@
 /** @type {import('@sveltejs/kit').Handle} */
 import { getAuth } from '$lib/getAuth';
+import { createTable, deleteEntriesInTable } from '$lib/server/database/databaseActions';
+import FTPServerController from '$lib/server/ftpserver/ftpserverController';
 import {
 	mineNetFolder,
 	mineNetJarsFolder,
@@ -7,13 +9,14 @@ import {
 	mineNetServersFolder
 } from '$lib/server/importantDirs';
 import { mnprint } from '$lib/server/mnPrint';
+import getServerCount from '$lib/server/panelUtils/getServerCount';
 import { validateUser } from '$lib/server/validateUser';
 import { redirect } from '@sveltejs/kit';
 import fs from 'node:fs';
 
 start();
 
-function start() {
+async function start() {
 	/**
 	 * @param {String} dir
 	 * @returns {void}
@@ -35,15 +38,57 @@ function start() {
 	console.log('[                        ]');
 	console.log('[--- RUNNING MINE-NET ---]');
 
-	mnprint('Launched!');
 	createDir(mineNetFolder);
 	createDir(mineNetJarsFolder);
 	createDir(mineNetServersFolder);
 	createDir(mineNetJavaVersionsFolder);
 	mnprint(`Software jars should be in ${mineNetJarsFolder}`);
+
+	createTable('servers', {
+		// @ts-ignore
+		id: {
+			type: 'INTEGER',
+			flags: 'PRIMARY KEY AUTOINCREMENT'
+		},
+		name: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		software: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		javaVersion: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		}
+		// TODO: Use getServerCount to launch an ftp server
+	});
+
+	createTable('ftpCredentials', {
+		// @ts-ignore
+		id: {
+			type: 'INTEGER',
+			flags: 'PRIMARY KEY AUTOINCREMENT'
+		},
+		username: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		password: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		serverId: {
+			type: 'INTEGER',
+			flags: 'NOT NULL'
+		}
+	});
+	if ((await getServerCount()) > 0) FTPServerController._start();
 }
 
 function shutdown() {
+	FTPServerController._shutdown();
 	process.exit(0);
 }
 

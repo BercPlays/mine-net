@@ -42,6 +42,9 @@
 		"@floating-ui/dom": "1.6.3",
 		"ansi-colors": "^4.1.3",
 		"dotenv": "^16.4.5",
-		"mydockerjs": "^1.5.0"
+		"ftp-srv": "^4.6.3",
+		"mydockerjs": "^1.5.0",
+		"netmask": "^2.0.2",
+		"sqlite3": "^5.1.7"
 	}
 }

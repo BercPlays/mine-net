@@ -1,4 +1,5 @@
 <script>
+	initializeStores();
 	import '../app.postcss';
 
 	import { page } from '$app/stores';
@@ -6,9 +7,8 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { AppBar, AppShell, storePopup } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, initializeStores, storePopup } from '@skeletonlabs/skeleton';
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>

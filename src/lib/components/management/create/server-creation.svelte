@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { Autocomplete, popup } from '@skeletonlabs/skeleton';
+	import { Autocomplete, getModalStore, popup } from '@skeletonlabs/skeleton';
+	const modalStore = getModalStore();
 	let version = '';
 	let inputedServerName = '';
 	let inputedJavaVersion = '';
