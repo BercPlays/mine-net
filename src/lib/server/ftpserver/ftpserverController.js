@@ -11,7 +11,7 @@ import { getDataBasedOnValue } from '../database/databaseActions';
 import path from 'path';
 
 class FTPServerController {
-	static _start() {
+	static start() {
 		assert(!this._started, 'FTP Server is already running!');
 		this._baseServer = new FtpSrv({
 			url: `ftp://${this._host}:${this._port}`,
@@ -51,7 +51,7 @@ class FTPServerController {
 			mnprint('Launching ftp server...');
 		});
 	}
-	static _shutdown() {
+	static shutdown() {
 		if (!this._started) return;
 		mnprint('Stopping ftp server...');
 		this._baseServer?.close();

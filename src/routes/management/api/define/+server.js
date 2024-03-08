@@ -1,4 +1,4 @@
-import { MC_SERVER_LIMIT } from '$env/static/private';
+import { SERVER_LIMIT } from '$env/static/private';
 import bytesToHex from '$lib/math/bytesToHex.js';
 import generateRandomBytes from '$lib/math/generateRandomBytes.js';
 import { insertIntoTable } from '$lib/server/database/databaseActions.js';
@@ -11,7 +11,7 @@ import { error, redirect } from '@sveltejs/kit';
 export const POST = async ({ request }) => {
 	const count = await getServerCount();
 
-	if (count >= MC_SERVER_LIMIT) error(404, 'Server limit reached!');
+	if (count >= SERVER_LIMIT) error(404, 'Server limit reached!');
 
 	const { serverName, version, javaVersion } = await request.json();
 	const validServerName = converToValidServerName(serverName);
@@ -20,14 +20,15 @@ export const POST = async ({ request }) => {
 		await insertIntoTable('servers', {
 			name: validServerName,
 			software: version,
-			javaVersion: javaVersion
+			javaVersion: javaVersion,
+			status: 'CREATING'
 		});
 		await insertIntoTable('ftpCredentials', {
 			username: validServerName,
 			password: bytesToHex(generateRandomBytes(8)),
 			serverId: count + 1
 		});
-		if (count <= 0) FTPServerController._start();
+		if (count <= 0) FTPServerController.start();
 		generateFilesForServer(validServerName, javaVersion);
 	});
 

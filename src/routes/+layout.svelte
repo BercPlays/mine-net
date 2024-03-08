@@ -1,4 +1,14 @@
 <script>
+	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
+	import {
+		AppBar,
+		AppShell,
+		Modal,
+		Toast,
+		initializeStores,
+		storePopup
+	} from '@skeletonlabs/skeleton';
+
 	initializeStores();
 	import '../app.postcss';
 
@@ -7,12 +17,11 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { AppBar, AppShell, initializeStores, storePopup } from '@skeletonlabs/skeleton';
-
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
+<Modal />
+<Toast />
 <AppShell>
 	<svelte:fragment slot="header">
 		<AppBar>
@@ -36,7 +45,7 @@
 						<button class="btn btn-sm variant-ghost-secondary px-6">Create Server</button>
 					</a>
 
-					<form action="/api/logout" method="POST">
+					<form action="/management/api/logout" method="POST">
 						<button class="btn btn-sm variant-ghost-error px-6">Logout</button>
 					</form>
 				{/if}

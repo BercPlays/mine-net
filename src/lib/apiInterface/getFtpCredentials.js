@@ -1,10 +1,10 @@
-export const serverExists = async (
-	/** @type {string} */ name,
+export const getFtpCredentials = async (
+	/** @type {string} */ username,
 	/** @type {((arg0: string, arg1: { method: string; body: string; headers: { 'content-type': string; }; }) => any)} */ fetch
 ) => {
-	const response = await fetch('/management/api/panel/serverExists', {
+	const response = await fetch('/management/api/panel/getFtpCredentials', {
 		method: 'POST',
-		body: JSON.stringify({ serverName: name }),
+		body: JSON.stringify({ username: username }),
 		headers: {
 			'content-type': 'application/json'
 		}
@@ -12,3 +12,5 @@ export const serverExists = async (
 	const json = await response.json();
 	return json;
 };
+
+export default getFtpCredentials;

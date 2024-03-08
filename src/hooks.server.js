@@ -1,6 +1,6 @@
 /** @type {import('@sveltejs/kit').Handle} */
 import { getAuth } from '$lib/getAuth';
-import { createTable, deleteEntriesInTable } from '$lib/server/database/databaseActions';
+import { createTable } from '$lib/server/database/databaseActions';
 import FTPServerController from '$lib/server/ftpserver/ftpserverController';
 import {
 	mineNetFolder,
@@ -61,6 +61,10 @@ async function start() {
 	// 	javaVersion: {
 	// 		type: 'TEXT',
 	// 		flags: 'NOT NULL'
+	// 	},
+	// 	status: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
 	// 	}
 	// });
 
@@ -83,11 +87,11 @@ async function start() {
 	// 		flags: 'NOT NULL'
 	// 	}
 	// });
-	// if ((await getServerCount()) > 0) FTPServerController._start();
+	// if ((await getServerCount()) > 0) FTPServerController.start();
 }
 
 function shutdown() {
-	FTPServerController._shutdown();
+	FTPServerController.shutdown();
 	process.exit(0);
 }
 

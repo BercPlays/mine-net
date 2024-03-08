@@ -99,12 +99,12 @@ export const createBaseServerFileSystem = (serverName, softwareFile, callback) =
  * @param {string} serverName
  * @param {string} javaVersion
  */
-export const generateFilesForServer = (serverName, javaVersion) => {
+export const generateFilesForServer = async (serverName, javaVersion) => {
 	const serverFolderPath = path.join(mineNetServersFolder, serverName);
 	const mnsInfo = JSON.parse(readFileSync(path.join(serverFolderPath, 'mns-info.json'), 'utf8'));
 	const softwareFile = mnsInfo['softwareFile'];
 
-	qExec(
+	await qExec(
 		getServerLaunchCommand(
 			path.join(serverFolderPath, softwareFile),
 			path.join(

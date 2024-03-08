@@ -22,11 +22,12 @@ class DataBaseController {
 	/**
 	 * Performs a POST on the database
 	 * @param {string} command
+	 * @param {any[] | undefined} [params]
 	 */
-	static run(command) {
+	static run(command, params) {
 		return new Promise((resolve, reject) => {
 			DataBaseController._connect();
-			DataBaseController._baseDb?.get(command, (err) => {
+			DataBaseController._baseDb?.get(command, params, (err) => {
 				if (err) reject(err.message);
 				resolve(undefined);
 			});

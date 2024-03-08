@@ -67,7 +67,7 @@
 	 * @param {String} javaVersion
 	 */
 	async function createServer(serverName, version, javaVersion) {
-		const response = await fetch('/api/define', {
+		const response = await fetch('/management/api/define', {
 			method: 'POST',
 			body: JSON.stringify({ serverName, version, javaVersion }),
 			headers: {

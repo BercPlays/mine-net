@@ -1,10 +1,9 @@
-export const serverExists = async (
-	/** @type {string} */ name,
+export const getFtpLink = async (
 	/** @type {((arg0: string, arg1: { method: string; body: string; headers: { 'content-type': string; }; }) => any)} */ fetch
 ) => {
-	const response = await fetch('/management/api/panel/serverExists', {
+	const response = await fetch('/management/api/panel/getFtpLink', {
 		method: 'POST',
-		body: JSON.stringify({ serverName: name }),
+		body: JSON.stringify({}),
 		headers: {
 			'content-type': 'application/json'
 		}
@@ -12,3 +11,5 @@ export const serverExists = async (
 	const json = await response.json();
 	return json;
 };
+
+export default getFtpLink;

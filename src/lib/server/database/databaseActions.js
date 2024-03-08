@@ -73,3 +73,12 @@ export const getDataBasedOnValue = (tableName, fieldName, value) => {
 		);
 	});
 };
+
+/**
+ * @param {String} tableName
+ * @param {String} value
+ * @param {String} fieldName
+ */
+export const deleteTableBasedOnValue = (tableName, fieldName, value) => {
+	return DataBaseController.run(`DELETE FROM ${tableName} WHERE ${fieldName} = ?`, [value]);
+};
