@@ -52,17 +52,18 @@ class DataBaseController {
 	/**
 	 * Performs a database Query
 	 * @param {string} command
+	 * @param {any[] | undefined} [params]
 	 */
-	// static all(command) {
-	// 	return new Promise((resolve, reject) => {
-	// 		DataBaseController._connect();
-	// 		DataBaseController._baseDb?.get(command, (err, row) => {
-	// 			if (err) reject(err.message);
-	// 			resolve(row);
-	// 		});
-	// 		DataBaseController._disconnect();
-	// 	});
-	// }
+	static all(command, params) {
+		return new Promise((resolve, reject) => {
+			DataBaseController._connect();
+			DataBaseController._baseDb?.all(command, params, (err, row) => {
+				if (err) reject(err.message);
+				resolve(row);
+			});
+			DataBaseController._disconnect();
+		});
+	}
 }
 
 /** @type {import('sqlite3').Database} */

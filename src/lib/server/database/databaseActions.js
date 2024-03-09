@@ -82,3 +82,31 @@ export const getDataBasedOnValue = (tableName, fieldName, value) => {
 export const deleteTableBasedOnValue = (tableName, fieldName, value) => {
 	return DataBaseController.run(`DELETE FROM ${tableName} WHERE ${fieldName} = ?`, [value]);
 };
+
+/**
+ * @param {String} tableName
+ * @param {String} value
+ * @param {String} fieldName
+ * @param {String} modifyColumn
+ * @param {String | number} modifyValue
+ */
+export const modifyBasedOnValue = (tableName, fieldName, value, modifyColumn, modifyValue) => {
+	return DataBaseController.run(
+		`UPDATE ${tableName} SET ${modifyColumn} = ${typeof modifyValue == 'string' ? `'${modifyValue}'` : modifyValue} WHERE ${fieldName} = ?`,
+		[value]
+	);
+};
+
+/**
+ *
+ * @param {String} tableName
+ */
+export const getAllEntriesInTable = (tableName) => {
+	// @ts-ignore
+	return new Promise((resolve, reject) => {
+		DataBaseController.all(`SELECT * FROM ${tableName}`).then((row) => {
+			if (!row) reject('No row exists');
+			resolve(row);
+		});
+	});
+};

@@ -3,6 +3,19 @@
 Quick and easy way to deploy minecraft servers on your local machine.
 `⚠ This website is not designer for cloud hosters ⚠`
 
+## Windows prerequisites ⚠
+
+Find your dockerd location
+(It should be in "C:\Program Files\Docker\Docker\resources")
+
+```powershell
+
+cd "C:\Program Files\Docker\Docker\resources"
+
+./dockerd --register-service
+
+```
+
 ## Dependencies ⚠
 
 Docker Desktop

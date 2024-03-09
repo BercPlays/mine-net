@@ -13,8 +13,13 @@ import getServerCount from '$lib/server/panelUtils/getServerCount';
 import { validateUser } from '$lib/server/validateUser';
 import { redirect } from '@sveltejs/kit';
 import fs from 'node:fs';
+import ansiColors from 'ansi-colors';
+import * as commandExists from 'command-exists';
+import GlobalOSObject from '$lib/server/oscmds/GlobalOSObject';
 
 start();
+
+function performWindowsCompatibility() {}
 
 async function start() {
 	/**
@@ -27,6 +32,38 @@ async function start() {
 			fs.mkdirSync(dir);
 		}
 	}
+	/**
+	 * @param {String} message
+	 * @param {boolean} predicate
+	 */
+	function prettyBool(message, predicate) {
+		return `${message} ${predicate === true ? ansiColors.greenBright('✓') : ansiColors.redBright('X')}`;
+	}
+	/**
+	 * @param {String} message
+	 */
+	function dockerprint(message) {
+		console.log(`[${ansiColors.cyanBright('Docker')}] ${message}`);
+	}
+	dockerprint(prettyBool('Docker CLI (Command Line Tool)', commandExists.sync('docker')));
+	dockerprint(prettyBool('Docker Compose', commandExists.sync('docker-compose')));
+
+	if (!commandExists.sync('docker')) {
+		console.log(ansiColors.red('Docker is not installed! Aborting...'));
+		shutdown();
+	}
+
+	const operatingSystem = process.platform;
+
+	switch (operatingSystem) {
+		case 'win32':
+			console.log(`${ansiColors.yellowBright('Running in windows compatibility mode.')}`);
+			GlobalOSObject.windowsCompatibilityMode = true;
+			break;
+		default:
+			console.log(`${ansiColors.yellowBright('Unknown operating system, defaulting to linux')}`);
+	}
+	if (GlobalOSObject.windowsCompatibilityMode) performWindowsCompatibility();
 
 	console.log('[--- RUNNING MINE-NET ---]');
 	console.log('[   SOFTWARE BY ZSIGSZA  ]');
@@ -44,50 +81,50 @@ async function start() {
 	createDir(mineNetJavaVersionsFolder);
 	mnprint(`Software jars should be in ${mineNetJarsFolder}`);
 
-	// await createTable('servers', {
-	// 	// @ts-ignore
-	// 	id: {
-	// 		type: 'INTEGER',
-	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
-	// 	},
-	// 	name: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	software: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	javaVersion: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	status: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	}
-	// });
+	await createTable('servers', {
+		// @ts-ignore
+		id: {
+			type: 'INTEGER',
+			flags: 'PRIMARY KEY AUTOINCREMENT'
+		},
+		name: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		software: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		javaVersion: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		status: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		}
+	});
+	await createTable('ftpCredentials', {
+		// @ts-ignore
+		id: {
+			type: 'INTEGER',
+			flags: 'PRIMARY KEY AUTOINCREMENT'
+		},
+		username: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		password: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		serverId: {
+			type: 'INTEGER',
+			flags: 'NOT NULL'
+		}
+	});
 
-	// await createTable('ftpCredentials', {
-	// 	// @ts-ignore
-	// 	id: {
-	// 		type: 'INTEGER',
-	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
-	// 	},
-	// 	username: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	password: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	serverId: {
-	// 		type: 'INTEGER',
-	// 		flags: 'NOT NULL'
-	// 	}
-	// });
-	// if ((await getServerCount()) > 0) FTPServerController.start();
+	if ((await getServerCount()) > 0) FTPServerController.start();
 }
 
 function shutdown() {

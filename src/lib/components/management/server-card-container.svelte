@@ -1,4 +1,5 @@
 <script>
+	import getAllServers from '$lib/apiInterface/getAllServers';
 	import ServerCard from './server-card.svelte';
 	import { onMount } from 'svelte';
 
@@ -11,11 +12,11 @@
 	let scrollLeft;
 
 	/**
-	 * @type {string | any[]}
+	 * @type {Object | any}
 	 */
-	export let serverData = [];
+	$: serverData = [];
 
-	onMount(() => {
+	onMount(async () => {
 		slider.addEventListener('mousedown', (e) => {
 			isDown = true;
 			startX = e.pageX - slider.offsetLeft;
@@ -38,6 +39,8 @@
 			const walk = (x - startX) * 1.5;
 			slider.scrollLeft = scrollLeft - walk;
 		});
+		serverData = await getAllServers(fetch);
+		console.log(serverData);
 	});
 </script>
 
@@ -50,8 +53,7 @@
 		<p class="text-white/70">Click the 'Create Server' button to get started!</p>
 	{:else}
 		{#each serverData as item}
-			<ServerCard name={item.serverName} software={item.softwareFile} online={item.online}
-			></ServerCard>
+			<ServerCard name={item.name} software={item.software} online={item.status}></ServerCard>
 		{/each}
 	{/if}
 </div>
