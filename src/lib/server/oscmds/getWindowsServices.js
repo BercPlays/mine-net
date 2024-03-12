@@ -1,5 +1,8 @@
 import { exec } from 'child_process';
 
+/**
+ * @returns {Promise<String[]>}
+ */
 const getWindowsServices = () => {
 	return new Promise((resolve) => {
 		exec('sc query state= all', function (err, stdout) {

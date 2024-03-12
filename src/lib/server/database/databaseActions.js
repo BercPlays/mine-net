@@ -98,7 +98,6 @@ export const modifyBasedOnValue = (tableName, fieldName, value, modifyColumn, mo
 };
 
 /**
- *
  * @param {String} tableName
  */
 export const getAllEntriesInTable = (tableName) => {
@@ -106,6 +105,17 @@ export const getAllEntriesInTable = (tableName) => {
 	return new Promise((resolve, reject) => {
 		DataBaseController.all(`SELECT * FROM ${tableName}`).then((row) => {
 			if (!row) reject('No row exists');
+			resolve(row);
+		});
+	});
+};
+
+/**
+ * @param {String} tableName
+ */
+export const getLastColumnInTable = (tableName) => {
+	return new Promise((resolve) => {
+		DataBaseController.get(`SELECT * FROM ${tableName} ORDER BY id DESC LIMIT 1`).then((row) => {
 			resolve(row);
 		});
 	});

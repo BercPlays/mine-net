@@ -1,0 +1,21 @@
+JVM info: Temurin - 1.8.0_392 - 25.392-b08
+java.net.preferIPv4Stack=true
+Current Time: 11/03/2024 22:11:35
+Host: files.minecraftforge.net [51.79.83.165]
+Host: maven.minecraftforge.net [51.79.83.165]
+Host: libraries.minecraft.net [13.107.213.45, 13.107.246.45]
+Host: launchermeta.mojang.com [13.107.246.45, 13.107.213.45]
+Host: piston-meta.mojang.com [13.107.213.45, 13.107.246.45]
+java.net.UnknownHostException: authserver.mojang.com
+	at java.net.Inet4AddressImpl.lookupAllHostAddr(Native Method)
+	at java.net.InetAddress$2.lookupAllHostAddr(InetAddress.java:867)
+	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1302)
+	at java.net.InetAddress$NameServiceAddresses.get(InetAddress.java:815)
+	at java.net.InetAddress.getAllByName0(InetAddress.java:1291)
+	at java.net.InetAddress.getAllByName(InetAddress.java:1144)
+	at java.net.InetAddress.getAllByName(InetAddress.java:1065)
+	at net.minecraftforge.installer.DownloadUtils.getIps(DownloadUtils.java:277)
+	at net.minecraftforge.installer.SimpleInstaller.main(SimpleInstaller.java:107)
+Exception in thread "main" 
+java.lang.NullPointerException
+	at net.minecraftforge.installer.SimpleInstaller.main(SimpleInstaller.java:107)

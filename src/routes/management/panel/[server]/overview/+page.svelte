@@ -26,7 +26,7 @@
 		title: 'Delete server?',
 		body: `Enter the server name to delete it. (${$page.url.pathname.split('/')[3]})`,
 		value: '',
-		valueAttr: { type: 'text', minlength: 3, maxlength: 32, required: true },
+		valueAttr: { type: 'text', minlength: 1, maxlength: 32, required: true },
 		/**
 		 * @param {String | Boolean} r
 		 */

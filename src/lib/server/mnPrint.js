@@ -14,6 +14,6 @@ export function mnprint(message) {
 	const currentTime = `${hours}:${minutes}`;
 
 	console.log(
-		`${ansiColors.bgYellow(`[${currentTime}]`)} ${ansiColors.green('[MINE-NET]')} ${message}`
+		`${ansiColors.yellowBright(`[${currentTime}]`)} ${ansiColors.green('[MINE-NET]')} ${message}`
 	);
 }

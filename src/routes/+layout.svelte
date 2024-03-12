@@ -3,25 +3,43 @@
 	import {
 		AppBar,
 		AppShell,
+		Drawer,
 		Modal,
 		Toast,
 		initializeStores,
-		storePopup
+		storePopup,
+		getDrawerStore
 	} from '@skeletonlabs/skeleton';
-
 	initializeStores();
+	const drawerStore = getDrawerStore();
+
 	import '../app.postcss';
 
 	import { page } from '$app/stores';
+	import Navigation from '$lib/components/navigation.svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	function drawerOpen() {
+		drawerStore.open({
+			id: 'nav',
+			width: 'w-[280px] md:w-[480px]',
+			padding: 'p-4',
+			bgBackdrop: 'bg-gradient-to-tr from-blue-500/20 via-cyan-500/20 to-zinc-500/20',
+			rounded: 'rounded-xl'
+		});
+	}
 </script>
 
-<Modal />
 <Toast />
+<Drawer position="right">
+	<Navigation />
+</Drawer>
+<Modal />
+
 <AppShell>
 	<svelte:fragment slot="header">
 		<AppBar>
@@ -36,18 +54,9 @@
 			<p class=" text-sm text-zinc-500">Software by zsigsza</p>
 			<svelte:fragment slot="trail">
 				{#if data.isLoggedIn}
-					{#if !($page.url.pathname == '/management')}
-						<a href="/management">
-							<button class="btn btn-sm variant-ghost-primary px-6">Server List</button>
-						</a>
-					{/if}
-					<a href="/management/create">
-						<button class="btn btn-sm variant-ghost-secondary px-6">Create Server</button>
-					</a>
-
-					<form action="/management/api/logout" method="POST">
-						<button class="btn btn-sm variant-ghost-error px-6">Logout</button>
-					</form>
+					<button on:click={drawerOpen} class="btn">
+						<span class="material-symbols-rounded">menu</span>
+					</button>
 				{/if}
 			</svelte:fragment>
 		</AppBar>

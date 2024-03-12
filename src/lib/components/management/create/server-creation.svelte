@@ -1,5 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
+	import serverCreationValidatior from '$lib/apiInterface/formValidation/serverCreationValidatior';
+	import { converToValidServerName } from '$lib/nameUtils';
 	import { Autocomplete, getModalStore, popup } from '@skeletonlabs/skeleton';
 	const modalStore = getModalStore();
 	let version = '';
@@ -75,22 +77,31 @@
 			}
 		});
 	}
+	function triggerModal() {
+		modalStore.trigger({
+			type: 'alert',
+			title: 'Invalid data',
+			body: 'Please recheck your inputed data.'
+		});
+	}
 </script>
 
-<form class="wintry-surface-500 shadow-2xl rounded px-5 py-5 w-72 h-[120]" autocomplete="off">
+<div class="wintry-surface-500 shadow-2xl rounded px-5 py-5 w-72 h-[120]">
 	<div class="text-center">
 		<strong class="text-xl">Create new server</strong>
 	</div>
-
+	<p class="text-md text-white/70">Server Name</p>
 	<input
-		class="input mt-2 px-5 mb-2"
+		class="input px-5 mb-2"
 		title="username"
 		name="username"
 		type="text"
 		bind:value={inputedServerName}
 		autocomplete="off"
-		placeholder="Server name"
+		placeholder="Name"
+		maxlength="16"
 	/>
+
 	<!-- Server File -->
 	<p class="text-md text-white/70">Server File</p>
 
@@ -102,8 +113,9 @@
 		use:popup={popupSettingsFile}
 		autocomplete="off"
 		placeholder="Versions"
+		maxlength="32"
 	/>
-	<p class="text-xs text-white/70 mb-2">{jarsPath}</p>
+
 	<div
 		class="card w-full max-w-60 max-h-36 p-1 overflow-y-auto"
 		tabindex="-1"
@@ -114,6 +126,7 @@
 	<!-- Server File -->
 
 	<!-- Server Java Version -->
+	<p class="text-md text-white/70">Server Java Version</p>
 	<input
 		class="input mb-2"
 		type="search"
@@ -121,7 +134,8 @@
 		bind:value={inputedJavaVersion}
 		use:popup={popupSettingsJavaVersion}
 		autocomplete="off"
-		placeholder="Versions"
+		placeholder="Java Versions"
+		maxlength="32"
 	/>
 	<div
 		class="card w-full max-w-60 max-h-36 p-1 overflow-y-auto"
@@ -140,10 +154,24 @@
 		Don't see your favourite server software? Ask the site provider.
 	</p>
 	<button
-		class="btn btn-sm variant-ghost-primary mt-2 px-6"
+		class="btn btn-sm variant-ghost-primary mt-2 mb-2 px-6"
 		on:click={async () => {
-			await createServer(inputedServerName, version, inputedJavaVersion);
-			goto('/');
+			if (
+				converToValidServerName(inputedServerName).trim().length <= 0 ||
+				inputedJavaVersion.length <= 0 ||
+				version.length <= 0
+			) {
+				triggerModal();
+				return;
+			}
+
+			if (await serverCreationValidatior(inputedServerName, version, inputedJavaVersion)) {
+				await createServer(inputedServerName, version, inputedJavaVersion);
+				goto('/');
+				return;
+			}
+			triggerModal();
 		}}>Create</button
 	>
-</form>
+	<p class="text-xs text-white/70 mb-2">16 char limit on name field!</p>
+</div>

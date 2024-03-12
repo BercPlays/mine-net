@@ -1,4 +1,4 @@
-import { serverExists } from '$lib/server/panelUtils/serverExists';
+import { serverExists } from '$lib/server/panelUtils/validation/serverExists';
 import { json } from '@sveltejs/kit';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */

@@ -1,7 +1,8 @@
 import path from 'node:path';
-import { serverExists } from './serverExists';
-import { mineNetServersFolder } from '../importantDirs';
-import { rmSync } from 'node:fs';
+import { serverExists } from './validation/serverExists';
+import { mineNetServersFolder, mineNetTrashFolder } from '../importantDirs';
+import { deleteTableBasedOnValue } from '../database/databaseActions';
+import { rename } from 'node:fs/promises';
 
 /**
  *
@@ -10,8 +11,11 @@ import { rmSync } from 'node:fs';
 const deleteServer = (serverName) => {
 	return new Promise((resolve, reject) => {
 		const serverFolder = path.join(mineNetServersFolder, serverName);
+
 		if (!serverExists(serverName)) reject(`No such server named ${serverName}`);
-		rmSync(serverFolder, { recursive: true });
+		rename(serverFolder, path.join(mineNetTrashFolder, serverName));
+		deleteTableBasedOnValue('servers', 'name', serverName);
+		deleteTableBasedOnValue('ftpCredentials', 'username', serverName);
 		resolve(undefined);
 	});
 };
