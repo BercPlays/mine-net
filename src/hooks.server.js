@@ -24,7 +24,8 @@ import GlobalOSObject from '$lib/server/oscmds/GlobalOSObject';
 
 import { exec } from 'node:child_process';
 import { START_COMMAND } from '$env/static/private';
-import { dockerUtils } from 'mydockerjs';
+import dockerJs from 'mydockerjs';
+const { dockerUtils } = dockerJs;
 
 start();
 
