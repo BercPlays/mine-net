@@ -21,7 +21,10 @@ import fs from 'node:fs';
 import ansiColors from 'ansi-colors';
 import * as commandExists from 'command-exists';
 import GlobalOSObject from '$lib/server/oscmds/GlobalOSObject';
+
 import { exec } from 'node:child_process';
+import { START_COMMAND } from '$env/static/private';
+import { dockerUtils } from 'mydockerjs';
 
 start();
 
@@ -38,6 +41,14 @@ async function performWindowsCompatibility() {
 			return;
 		}
 		compatprint('Starting docker service');
+	});
+}
+
+function linuxCommands() {
+	exec(START_COMMAND, {}, (error, stdout, stderr) => {
+		if (error) console.log(ansiColors.red(error.message));
+		if (stdout) console.log(stdout);
+		if (stderr) console.log(ansiColors.red(stderr));
 	});
 }
 
@@ -80,8 +91,12 @@ async function start() {
 			console.log(`${ansiColors.yellowBright('Running in windows compatibility mode.')}`);
 			GlobalOSObject.windowsCompatibilityMode = true;
 			break;
+		case 'linux':
+			linuxCommands();
+			break;
 		default:
 			console.log(`${ansiColors.yellowBright('Unknown operating system, defaulting to linux')}`);
+			linuxCommands();
 	}
 
 	// Will exit if docker is not found
@@ -94,50 +109,50 @@ async function start() {
 	createDir(mineNetJavaVersionsFolder);
 	mnprint(`Software jars should be in ${mineNetJarsFolder}`);
 
-	// await createTable('servers', {
-	// 	// @ts-ignore
-	// 	id: {
-	// 		type: 'INTEGER',
-	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
-	// 	},
-	// 	name: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	software: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	javaVersion: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	status: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	}
-	// });
-	// await createTable('ftpCredentials', {
-	// 	// @ts-ignore
-	// 	id: {
-	// 		type: 'INTEGER',
-	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
-	// 	},
-	// 	username: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	password: {
-	// 		type: 'TEXT',
-	// 		flags: 'NOT NULL'
-	// 	},
-	// 	serverId: {
-	// 		type: 'INTEGER',
-	// 		flags: 'NOT NULL'
-	// 	}
-	// });
-
-	// if ((await getServerCount()) > 0) FTPServerController.start();
+	await createTable('servers', {
+		// @ts-ignore
+		id: {
+			type: 'INTEGER',
+			flags: 'PRIMARY KEY AUTOINCREMENT'
+		},
+		name: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		software: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		javaVersion: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		status: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		}
+	});
+	await createTable('ftpCredentials', {
+		// @ts-ignore
+		id: {
+			type: 'INTEGER',
+			flags: 'PRIMARY KEY AUTOINCREMENT'
+		},
+		username: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		password: {
+			type: 'TEXT',
+			flags: 'NOT NULL'
+		},
+		serverId: {
+			type: 'INTEGER',
+			flags: 'NOT NULL'
+		}
+	});
+	if ((await getServerCount()) > 0) FTPServerController.start();
+	console.log(dockerUtils.isDockerCliInstalledSync());
 }
 
 function shutdown() {
