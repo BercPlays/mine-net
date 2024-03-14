@@ -30,7 +30,7 @@ npm run build
 
 First, configure your .env file, based on .env.example.
 
-Use the start.cmd/.sh file to run the server, or:
+Use the start.sh file to run the server, or:
 ```bash
 
 node -r dotenv/config build
