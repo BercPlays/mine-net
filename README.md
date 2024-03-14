@@ -1,20 +1,12 @@
 # MineNet (SvelteKit)
 
 Quick and easy way to deploy minecraft servers on your local machine.
+
 `⚠ This website is not designer for cloud hosters ⚠`
 
-## Windows prerequisites ⚠
+`⚠ This isn't compatible with windows ⚠`
+Tested on antiX (Debian based)
 
-Find your dockerd location
-(It should be in "C:\Program Files\Docker\Docker\resources")
-
-```powershell
-
-cd "C:\Program Files\Docker\Docker\resources"
-
-./dockerd --register-service
-
-```
 
 ## Dependencies ⚠
 
