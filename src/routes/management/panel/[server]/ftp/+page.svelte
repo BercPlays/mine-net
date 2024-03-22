@@ -2,13 +2,21 @@
 	import { page } from '$app/stores';
 	import getFtpCredentials from '$lib/apiInterface/getFtpCredentials';
 	import getFtpLink from '$lib/apiInterface/getFtpLink';
-	import { clipboard, getToastStore } from '@skeletonlabs/skeleton';
+	import { clipboard, getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	const toastStore = getToastStore();
+	const modelStore = getModalStore();
 
 	function copied() {
 		toastStore.trigger({
 			message: 'Copied to clipboard 📋'
+		});
+	}
+	function ftpHelp() {
+		modelStore.trigger({
+			type: 'alert',
+			title: 'FTP Active',
+			body: 'Try setting the ftp connection to "Active" in your ftp client.'
 		});
 	}
 	/**@type {String}*/
@@ -70,5 +78,6 @@
 		<a href="ftp://{ftpLink}" target="_blank">
 			<button class="btn variant-ghost-primary mt-2">Open FTP application</button>
 		</a>
+		<button class="btn text-yellow-500" on:click={ftpHelp}>Cant connect to FTP?</button>
 	{/await}
 </div>

@@ -96,12 +96,7 @@ export const generateFilesForServer = (serverName, javaVersion) => {
 	qExec(
 		getServerLaunchCommand(
 			path.join(serverFolderPath, softwareFile),
-			path.join(
-				mineNetJavaVersionsFolder,
-				javaVersion,
-				'bin',
-				JAVA_EXECUTABLE.toUpperCase() === 'JAVA' ? 'java.exe' : 'javaw.exe'
-			),
+			path.join(mineNetJavaVersionsFolder, javaVersion, 'bin', 'java'),
 			DEFAULT_MIN_MEM,
 			DEFAULT_MAX_MEM,
 			USE_OPTIMIZED_FLAGS.toUpperCase() === 'TRUE' ? true : false

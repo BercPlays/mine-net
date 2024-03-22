@@ -1,8 +1,14 @@
 import { USERNAME } from '$env/static/private';
-import os from 'node:os';
 import path from 'node:path';
+import os from 'node:os';
 
-export const documentsDir = path.join(os.homedir(), 'home', USERNAME, 'Documents');
+function getDocuments() {
+	return process.platform == 'linux'
+		? path.join('/home', USERNAME, 'Documents')
+		: path.join(os.homedir(), 'Documents');
+}
+
+export const documentsDir = getDocuments();
 export const mineNetFolder = path.join(documentsDir, 'MNS');
 export const mineNetJarsFolder = path.join(mineNetFolder, 'jars');
 export const mineNetTrashFolder = path.join(mineNetFolder, 'trash');

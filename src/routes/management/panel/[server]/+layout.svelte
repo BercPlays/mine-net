@@ -21,11 +21,6 @@
 			baseLayout: true
 		},
 		{
-			icon: 'settings',
-			title: 'Settings',
-			href: 'settings'
-		},
-		{
 			icon: 'cloud_done',
 			title: 'Backups',
 			href: 'backups'

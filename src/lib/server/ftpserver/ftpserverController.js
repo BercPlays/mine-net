@@ -31,7 +31,11 @@ class FTPServerController {
 				'MKD',
 				'ABOR',
 				'TYPE',
-				'RETR'
+				'RETR',
+				'PORT',
+				'REST',
+				'EPSV',
+				'EPRT'
 			]
 		});
 		this._started = true;

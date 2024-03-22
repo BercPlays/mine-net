@@ -20,10 +20,37 @@ import { redirect } from '@sveltejs/kit';
 import fs from 'node:fs';
 import ansiColors from 'ansi-colors';
 import * as commandExists from 'command-exists';
-import dockerJs from 'mydockerjs';
-const { dockerUtils } = dockerJs;
+import DockerApi from '$lib/server/docker/dockerApi';
+import { DOCKER_IMAGE } from '$env/static/private';
 
 start();
+
+/**
+ * @param {String} dockerImage
+ */
+async function dockerImageExists(dockerImage) {
+	return new Promise((resolve) => {
+		DockerApi.listImages().then((data) => {
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				/** @type String[] */
+				const RepoTags = element.RepoTags;
+				const target = dockerImage.includes(':') ? dockerImage : `${dockerImage}:latest`;
+				if (RepoTags.includes(target)) resolve(true);
+			}
+			resolve(false);
+		});
+	});
+}
+
+async function setupDockerImage() {
+	if (await dockerImageExists(DOCKER_IMAGE)) return;
+	mnprint(`Downloading ${DOCKER_IMAGE}`);
+	await DockerApi.pullImage((event) => {
+		console.log(event);
+	});
+	mnprint(`Downloaded ${DOCKER_IMAGE}`);
+}
 
 async function start() {
 	/**
@@ -56,58 +83,59 @@ async function start() {
 		console.log(ansiColors.red('Docker is not installed! Aborting...'));
 		shutdown();
 	}
-	createDir(mineNetFolder);
-	createDir(mineNetJarsFolder);
-	createDir(mineNetTrashFolder);
-	createDir(mineNetServersFolder);
-	createDir(mineNetJavaVersionsFolder);
+	await setupDockerImage();
 
-	mnprint(`Software jars should be in ${mineNetJarsFolder}`);
+	// createDir(mineNetFolder);
+	// createDir(mineNetJarsFolder);
+	// createDir(mineNetTrashFolder);
+	// createDir(mineNetServersFolder);
+	// createDir(mineNetJavaVersionsFolder);
 
-	await createTable('servers', {
-		// @ts-ignore
-		id: {
-			type: 'INTEGER',
-			flags: 'PRIMARY KEY AUTOINCREMENT'
-		},
-		name: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		software: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		javaVersion: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		status: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		}
-	});
-	await createTable('ftpCredentials', {
-		// @ts-ignore
-		id: {
-			type: 'INTEGER',
-			flags: 'PRIMARY KEY AUTOINCREMENT'
-		},
-		username: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		password: {
-			type: 'TEXT',
-			flags: 'NOT NULL'
-		},
-		serverId: {
-			type: 'INTEGER',
-			flags: 'NOT NULL'
-		}
-	});
+	// mnprint(`Software jars should be in ${mineNetJarsFolder}`);
+
+	// await createTable('servers', {
+	// 	// @ts-ignore
+	// 	id: {
+	// 		type: 'INTEGER',
+	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
+	// 	},
+	// 	name: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	software: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	javaVersion: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	status: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	}
+	// });
+	// await createTable('ftpCredentials', {
+	// 	// @ts-ignore
+	// 	id: {
+	// 		type: 'INTEGER',
+	// 		flags: 'PRIMARY KEY AUTOINCREMENT'
+	// 	},
+	// 	username: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	password: {
+	// 		type: 'TEXT',
+	// 		flags: 'NOT NULL'
+	// 	},
+	// 	serverId: {
+	// 		type: 'INTEGER',
+	// 		flags: 'NOT NULL'
+	// 	}
+	// });
 	if ((await getServerCount()) > 0) FTPServerController.start();
-	console.log(dockerUtils.isDockerCliInstalledSync());
 }
 
 function shutdown() {
