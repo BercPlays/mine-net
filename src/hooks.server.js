@@ -47,7 +47,14 @@ async function setupDockerImage() {
 	if (await dockerImageExists(DOCKER_IMAGE)) return;
 	mnprint(`Downloading ${DOCKER_IMAGE}`);
 	await DockerApi.pullImage((event) => {
-		console.log(event);
+		/**
+		 * @type {string}
+		 */
+		const status = event.status;
+		if (status.includes('Pulling')) return;
+
+		const progress = event.progress;
+		mnprint(`${status} ${DOCKER_IMAGE} ${progress}`);
 	});
 	mnprint(`Downloaded ${DOCKER_IMAGE}`);
 }
