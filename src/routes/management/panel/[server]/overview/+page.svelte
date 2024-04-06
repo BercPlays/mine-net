@@ -5,6 +5,7 @@
 	import { page } from '$app/stores';
 	import deleteServer from '$lib/apiInterface/deleteServer';
 	import { goto } from '$app/navigation';
+	import { startServer } from '$lib/apiInterface/startServer';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -50,7 +51,12 @@
 
 	<p class="w-full text-center text-xl"><strong>exampleip.ddns.net</strong></p>
 	<p class="w-full text-center text-md pb-10 text-red-500">Offline</p>
-	<button class="btn btn-sm variant-ghost-primary px-6">Launch Server</button>
+	<button
+		class="btn btn-sm variant-ghost-primary px-6"
+		on:click={() => {
+			startServer($page.url.pathname.split('/')[3]);
+		}}>Launch Server</button
+	>
 </div>
 
 <!-- Popup -->

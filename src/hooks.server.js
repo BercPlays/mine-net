@@ -16,12 +16,11 @@ import {
 import { mnprint } from '$lib/server/mnPrint';
 import getServerCount from '$lib/server/panelUtils/getServerCount';
 import { validateUser } from '$lib/server/validateUser';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import fs from 'node:fs';
 import ansiColors from 'ansi-colors';
 import * as commandExists from 'command-exists';
 import DockerApi from '$lib/server/docker/dockerApi';
-import { DOCKER_IMAGE } from '$env/static/private';
 
 start();
 
@@ -44,19 +43,15 @@ async function dockerImageExists(dockerImage) {
 }
 
 async function setupDockerImage() {
-	if (await dockerImageExists(DOCKER_IMAGE)) return;
-	mnprint(`Downloading ${DOCKER_IMAGE}`);
-	await DockerApi.pullImage((event) => {
+	return DockerApi.pullImage((event) => {
 		/**
 		 * @type {string}
 		 */
 		const status = event.status;
-		if (status.includes('Pulling')) return;
 
 		const progress = event.progress;
-		mnprint(`${status} ${DOCKER_IMAGE} ${progress}`);
+		mnprint(`${status == undefined ? '' : status} ${progress == undefined ? '' : progress}`);
 	});
-	mnprint(`Downloaded ${DOCKER_IMAGE}`);
 }
 
 async function start() {
@@ -90,7 +85,9 @@ async function start() {
 		console.log(ansiColors.red('Docker is not installed! Aborting...'));
 		shutdown();
 	}
+
 	await setupDockerImage();
+	DockerApi.updatingImage = false;
 
 	// createDir(mineNetFolder);
 	// createDir(mineNetJarsFolder);
@@ -156,10 +153,10 @@ process.on('SIGTERM', shutdown);
 export async function handle({ event, resolve }) {
 	const { cookies } = event;
 	const authObject = getAuth(cookies);
+	if (DockerApi.updatingImage) error(404, 'Pulling dockerfile, please wait');
 
 	if (event.url.pathname.startsWith('/management')) {
 		if (!authObject.session) {
-			console.log('Protecting');
 			throw redirect(303, '/');
 		} else {
 			// @ts-ignore

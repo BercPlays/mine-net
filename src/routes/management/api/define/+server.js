@@ -8,6 +8,7 @@ import getServerCount from '$lib/server/panelUtils/getServerCount.js';
 import { converToValidServerName } from '$lib/nameUtils.js';
 import { createBaseServerFileSystem, generateFilesForServer } from '$lib/server/serverRuntime.js';
 import { error, redirect } from '@sveltejs/kit';
+import DockerApi from '$lib/server/docker/dockerApi';
 
 /**
  * @param {string} serverName
