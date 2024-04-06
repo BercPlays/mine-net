@@ -36,7 +36,8 @@ export const POST = async ({ request }) => {
 		[
 			`${path.join(mineNetServersFolder, serverName)}:/app/server`,
 			`${path.join(mineNetJavaVersionsFolder)}:/app/jvs`,
-			`${path.join(mineNetJarsFolder)}:/app/jfs`
+			`${path.join(mineNetJarsFolder)}:/app/jfs`,
+			path.join('/app/jvs', serverData.javaVersion, 'bin')
 		],
 		'/app/server/',
 		[
