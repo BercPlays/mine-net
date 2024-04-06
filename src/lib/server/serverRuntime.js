@@ -51,10 +51,7 @@ export const getServerLaunchCommand = (
 	const javaPath = javaVersion === 'AUTO' ? 'java' : `"${javaVersion}"`;
 	const flags = useOptimizedFlags === true ? optimizedFlags : '';
 	// --nogui
-	return `${javaPath} -Xmx${maxMem}M -Xms${minMem}M ${flags} -jar "${serverFile}"`.replaceAll(
-		'/\\/',
-		'/'
-	);
+	return `${javaPath} -Xmx${maxMem}M -Xms${minMem}M ${flags} -jar "${serverFile}"`;
 };
 
 /**
@@ -65,20 +62,12 @@ export const createBaseServerFileSystem = (serverName, softwareFile) => {
 	return new Promise((resolve) => {
 		const serverFolderPath = path.join(mineNetServersFolder, serverName);
 		const softwareFilePath = path.join(mineNetJarsFolder, softwareFile);
-		const mnsInfoPath = path.join(serverFolderPath, 'mns-info.json');
 
-		const mnsInfo = {
-			serverName: serverName,
-			softwareFile: softwareFile
-		};
 		mkdir(serverFolderPath).then(() => {
 			mnprint(`Making directory for server ${serverName}`);
-			writeFile(mnsInfoPath, JSON.stringify(mnsInfo)).then(() => {
-				mnprint(`Wrote mns-info.json to server ${serverName}`);
-				copyFile(softwareFilePath, path.join(serverFolderPath, softwareFile)).then(() => {
-					mnprint(`Copied ${softwareFile} to server ${serverName}`);
-					resolve(undefined);
-				});
+			copyFile(softwareFilePath, path.join(serverFolderPath, softwareFile)).then(() => {
+				mnprint(`Copied ${softwareFile} to server ${serverName}`);
+				resolve(undefined);
 			});
 		});
 	});

@@ -33,17 +33,12 @@ export const POST = async ({ request }) => {
 				}
 			]
 		},
-		[
-			`${path.join(mineNetServersFolder, serverName)}:/app/server`,
-			`${path.join(mineNetJavaVersionsFolder)}:/app/jvs`,
-			`${path.join(mineNetJarsFolder)}:/app/jfs`,
-			path.join('/app/jvs', serverData.javaVersion, 'bin')
-		],
+		[],
 		'/app/server/',
 		[
 			getServerLaunchCommand(
-				path.join('/app/server', serverData.software),
-				path.join('/app/jvs', serverData.javaVersion, 'bin', 'java'),
+				path.join(mineNetJarsFolder, serverData.software),
+				path.join(mineNetJavaVersionsFolder, serverData.javaVersion, 'bin', 'java'),
 				'1024',
 				'2048',
 				true
