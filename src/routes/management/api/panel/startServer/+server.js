@@ -42,7 +42,7 @@ export const POST = async ({ request }) => {
 		'/app/server/',
 		[
 			getServerLaunchCommand(
-				path.join('/app/jfs', serverData.software),
+				path.join('/app/server', serverData.software),
 				path.join('/app/jvs', serverData.javaVersion, 'bin', 'java'),
 				'1024',
 				'2048',
