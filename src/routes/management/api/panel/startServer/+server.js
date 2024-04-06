@@ -1,7 +1,11 @@
 import { getDataBasedOnValue } from '$lib/server/database/databaseActions';
 import DockerApi from '$lib/server/docker/dockerApi';
 import GlobalContainers from '$lib/server/globalContainers';
-import { mineNetServersFolder } from '$lib/server/importantDirs';
+import {
+	mineNetJarsFolder,
+	mineNetJavaVersionsFolder,
+	mineNetServersFolder
+} from '$lib/server/importantDirs';
 import { serverExists } from '$lib/server/panelUtils/validation/serverExists';
 import { getServerLaunchCommand } from '$lib/server/serverRuntime';
 import { json } from '@sveltejs/kit';
@@ -29,7 +33,11 @@ export const POST = async ({ request }) => {
 				}
 			]
 		},
-		[`${path.join(mineNetServersFolder, serverName)}:/app/server`],
+		[
+			`${path.join(mineNetServersFolder, serverName)}:/app/server`,
+			`${path.join(mineNetJavaVersionsFolder)}:/app/jvs`,
+			`${path.join(mineNetJarsFolder)}:/app/jfs`
+		],
 		'/app/server/',
 		[
 			getServerLaunchCommand(

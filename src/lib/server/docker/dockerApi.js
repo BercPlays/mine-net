@@ -84,20 +84,20 @@ class DockerApi {
 
 					HostConfig: {
 						Binds: binds,
-						Mounts: [
-							{
-								Target: '/app/jvs',
-								Source: mineNetJavaVersionsFolder,
-								Type: 'volume',
-								ReadOnly: false
-							},
-							{
-								Target: '/app/jfs',
-								Source: mineNetJarsFolder,
-								Type: 'volume',
-								ReadOnly: false
-							}
-						],
+						// Mounts: [
+						// 	{
+						// 		Target: '/app/jvs',
+						// 		Source: mineNetJavaVersionsFolder,
+						// 		Type: 'volume',
+						// 		ReadOnly: false
+						// 	},
+						// 	{
+						// 		Target: '/app/jfs',
+						// 		Source: mineNetJarsFolder,
+						// 		Type: 'volume',
+						// 		ReadOnly: false
+						// 	}
+						// ],
 						AutoRemove: true,
 
 						PortBindings: portBindings
