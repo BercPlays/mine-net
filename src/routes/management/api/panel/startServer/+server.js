@@ -18,8 +18,7 @@ export const POST = async ({ request }) => {
 	if (!serverExists(serverName)) return json({ status: "server doesn't exists." });
 	const serverData = await getDataBasedOnValue('servers', 'name', serverName);
 
-	/** @type {import('dockerode').Container} */
-	let container = await DockerApi.createContainer(
+	let container = await DockerApi.run(
 		serverName,
 		{
 			'25565/tcp': [
@@ -33,20 +32,19 @@ export const POST = async ({ request }) => {
 				}
 			]
 		},
-		[],
+		[`${path.join(mineNetServersFolder, serverName)}:/app/server`],
 		'/app/server/',
-		[
-			getServerLaunchCommand(
-				path.join(mineNetJarsFolder, serverData.software),
-				path.join(mineNetJavaVersionsFolder, serverData.javaVersion, 'bin', 'java'),
-				'1024',
-				'2048',
-				true
-			)
-		]
+		// @ts-ignore
+		getServerLaunchCommand(
+			path.join(mineNetJarsFolder, serverData.software),
+			path.join(mineNetJavaVersionsFolder, serverData.javaVersion, 'bin', 'java'),
+			'1024',
+			'2048',
+			true,
+			true
+		)
 	);
 	GlobalContainers.addContainer(container, serverName);
-	container.start();
 
 	return json({
 		status: 'ok'

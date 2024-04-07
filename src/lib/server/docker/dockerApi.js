@@ -1,6 +1,5 @@
 import { DOCKER_IMAGE } from '$env/static/private';
 import dockerApi from 'dockerode';
-import { mineNetJarsFolder, mineNetJavaVersionsFolder } from '../importantDirs';
 
 class DockerApi {
 	static getVolumes() {
@@ -108,6 +107,39 @@ class DockerApi {
 					StdinOnce: false
 				})
 				.then(resolve);
+		});
+	}
+	/**
+	 * @param {String} containerName
+	 * @param {import('dockerode').PortMap | undefined} portBindings
+	 * @param {String[] | undefined} binds
+	 * @param {String[]} cmd
+	 * @param {String} cwd
+	 * @returns {Promise<import('dockerode').Container>}
+	 */
+	static run(containerName, portBindings, binds, cwd, cmd) {
+		return new Promise((resolve) => {
+			this._api
+				.run(DOCKER_IMAGE, cmd, process.stdout, {
+					name: containerName,
+					AttachStdin: false,
+					AttachStdout: true,
+					AttachStderr: true,
+					Tty: true,
+					WorkingDir: cwd,
+					HostConfig: {
+						Binds: binds,
+						AutoRemove: true,
+						PortBindings: portBindings
+					},
+					Cmd: cmd,
+					OpenStdin: false,
+					StdinOnce: false
+				})
+				.then(function (data) {
+					var container = data[1];
+					resolve(container);
+				});
 		});
 	}
 }

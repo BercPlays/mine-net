@@ -39,6 +39,7 @@ function qExec(command, cwd) {
  * @param {String} minMem
  * @param {String} maxMem
  * @param {boolean} useOptimizedFlags
+ * @param {boolean} dockerize
  */
 
 export const getServerLaunchCommand = (
@@ -46,11 +47,20 @@ export const getServerLaunchCommand = (
 	javaVersion,
 	minMem,
 	maxMem,
-	useOptimizedFlags
+	useOptimizedFlags,
+	dockerize
 ) => {
 	const javaPath = javaVersion === 'AUTO' ? 'java' : `"${javaVersion}"`;
 	const flags = useOptimizedFlags === true ? optimizedFlags : '';
 	// --nogui
+	if (dockerize)
+		return [
+			javaPath,
+			`-Xmx${maxMem}M`,
+			`-Xms${minMem}M`,
+			...optimizedFlags.split(' '),
+			`-jar "${serverFile}`
+		];
 	return `${javaPath} -Xmx${maxMem}M -Xms${minMem}M ${flags} -jar "${serverFile}"`;
 };
 
@@ -83,12 +93,14 @@ export const generateFilesForServer = (serverName, javaVersion) => {
 	const softwareFile = mnsInfo['softwareFile'];
 
 	qExec(
+		// @ts-ignore
 		getServerLaunchCommand(
 			path.join(serverFolderPath, softwareFile),
 			path.join(mineNetJavaVersionsFolder, javaVersion, 'bin', 'java'),
 			DEFAULT_MIN_MEM,
 			DEFAULT_MAX_MEM,
-			USE_OPTIMIZED_FLAGS.toUpperCase() === 'TRUE' ? true : false
+			USE_OPTIMIZED_FLAGS.toUpperCase() === 'TRUE' ? true : false,
+			false
 		),
 		serverFolderPath
 	)
